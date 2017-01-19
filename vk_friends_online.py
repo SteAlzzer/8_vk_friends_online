@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from getpass import getpass
 import vk
 
 
@@ -42,14 +43,23 @@ def output_friends_to_console(friends_online, sort=False):
     print('---')
     print('Всего друзей в сети: {}'.format(len(friends_online)))
 
+def get_user_password():
+	password = getpass()
+	return password
+
 
 if __name__ == '__main__':
     parser = ArgumentParser(description='List your friends that online in vk.com right now')
     parser.add_argument('login', help='Your vk login')
-    parser.add_argument('password', help='Your vk password')
+    parser.add_argument('password', nargs='?', default=None, help='Your vk password')
     parser.add_argument('-s', '--sort', action='store_true', default=False, help='Sort your mates by name, not by vk hints')
     args = parser.parse_args()
+    
+    if args.password is None:
+    	password = get_user_password()
+    else:
+    	password = args.password
 
-    vk_handler = vk_api_via_auth(args.login, args.password)
+    vk_handler = vk_api_via_auth(args.login, password)
     friends_online = get_online_friends(vk_handler)
     output_friends_to_console(friends_online, args.sort)
