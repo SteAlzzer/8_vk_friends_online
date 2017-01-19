@@ -1,32 +1,55 @@
+from argparse import ArgumentParser
 import vk
 
 
-APP_ID = 4592955
+APP_ID = 5830124
 
 
-def get_user_login():
-    pass
-
-
-def get_user_password():
-    pass
-
-
-def get_online_friends(login, password):
+def vk_api_via_auth(login, password):
     session = vk.AuthSession(
         app_id=APP_ID,
         user_login=login,
         user_password=password,
+        scope='friends'
     )
     api = vk.API(session)
-    # например, api.friends.get()
+    return api
 
 
-def output_friends_to_console(friends_online):
-    pass
+def get_users_names_by_ids(vk_handler, dict_of_ids):
+    list_of_users_names = vk_handler.users.get(order='hints', user_ids=dict_of_ids['online_mobile'])
+    for name in list_of_users_names:
+        name['mobile'] = 1
+    list_of_users_names.extend(vk_handler.users.get(user_ids=dict_of_ids['online']))
+    return list_of_users_names
+
+
+def get_online_friends(vk_handler):
+    dict_of_ids = vk_handler.friends.getOnline(online_mobile=1)
+    list_of_users_names = get_users_names_by_ids(vk_handler, dict_of_ids)
+    return list_of_users_names
+
+
+def output_friends_to_console(friends_online, sort=False):
+    if sort:
+        friends_online = sorted(friends_online, key=lambda f: '{} {}'.format(f['last_name'], f['first_name']))
+    for user in friends_online:
+        if 'mobile' in user:
+            template = '{} {} [m]'
+        else:
+            template = '{} {}'
+        print(template.format(user['last_name'], user['first_name']))
+    print('---')
+    print('Всего друзей в сети: {}'.format(len(friends_online)))
+
 
 if __name__ == '__main__':
-    login = get_user_login()
-    password = get_user_password()
-    friends_online = get_online_friends(login, password)
-    output_friends_to_console(friends_online)
+    parser = ArgumentParser(description='List your friends that online in vk.com right now')
+    parser.add_argument('login', help='Your vk login')
+    parser.add_argument('password', help='Your vk password')
+    parser.add_argument('-s', '--sort', action='store_true', default=False, help='Sort your mates by name, not by vk hints')
+    args = parser.parse_args()
+
+    vk_handler = vk_api_via_auth(args.login, args.password)
+    friends_online = get_online_friends(vk_handler)
+    output_friends_to_console(friends_online, args.sort)

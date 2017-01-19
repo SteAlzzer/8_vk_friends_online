@@ -1,7 +1,19 @@
 # Watcher of Friends Online
 
-[TODO. There will be project description]
+Stalk for your friends from command line!
+Just enter you login and password and script will show you your friends who is online right now.
 
-# Project Goals
+# How to use:
+Command line:
+`python vk_friends_online.py [-h] [-s] login password`.
+ -	`login` - Your vk login
+ -	`password` - Your vk password
+ -	`-h (--help)` -  Show this help message and exit
+ -	`-s (--sort)` -  Sort your mates by name, not by vk hints
 
-The code is written for educational purposes. Training course for web-developers - [DEVMAN.org](https://devman.org)
+But before launch you need to install external module. Just print this:
+`pip install -r requirements.txt`.
+
+# Just something you need to know
+This script uses `vk 2.0.2` module from official python repo.
+All we do with your `login` and `pass` - *just passing them to that module*.
