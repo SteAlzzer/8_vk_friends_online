@@ -6,7 +6,7 @@ import vk
 APP_ID = 5830124
 
 
-def vk_api_via_auth(login, password):
+def get_vk_api_via_auth(login, password):
     session = vk.AuthSession(
         app_id=APP_ID,
         user_login=login,
@@ -41,11 +41,11 @@ def output_friends_to_console(friends_online, sort=False):
             template = '{} {}'
         print(template.format(user['last_name'], user['first_name']))
     print('---')
-    print('Всего друзей в сети: {}'.format(len(friends_online)))
+    print('Total friends online: {}'.format(len(friends_online)))
 
 def get_user_password():
-	password = getpass()
-	return password
+    password = getpass()
+    return password
 
 
 if __name__ == '__main__':
@@ -56,10 +56,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     if args.password is None:
-    	password = get_user_password()
+        password = get_user_password()
     else:
-    	password = args.password
+        password = args.password
 
-    vk_handler = vk_api_via_auth(args.login, password)
+    vk_handler = get_vk_api_via_auth(args.login, password)
     friends_online = get_online_friends(vk_handler)
     output_friends_to_console(friends_online, args.sort)

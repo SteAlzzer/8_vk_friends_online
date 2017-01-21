@@ -15,6 +15,18 @@ If `password` not entered via args, script will ask you for it later.
 
 Profit of it is that you dont want to show it in command line. Therefore script will ask it in **secret-mode**.
 
+# Example of script execution
+```
+vk_friends_online> python vk_friends_online.py login@vk.com -s
+Password: 
+Friend 1 [m]
+Friend 2
+Friend 3 [m]
+Friend 4
+--
+Total friends online: 4 
+```
+
 # Preparations
 But before launch you need to install external module. Just print this:
 `pip install -r requirements.txt`.
