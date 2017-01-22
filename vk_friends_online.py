@@ -33,8 +33,10 @@ def get_online_friends(vk_handler):
 
 def output_friends_to_console(friends_online, sort=False):
     if sort:
-        friends_online = sorted(friends_online, key=lambda f: '{} {}'.format(f['last_name'], f['first_name']))
-    for user in friends_online:
+        friends_online_for_listing = sorted(friends_online, key=lambda f: '{} {}'.format(f['last_name'], f['first_name']))
+    else:
+    	friends_online_for_listing = friends_online.copy()
+    for user in friends_online_for_listing:
         if 'mobile' in user:
             template = '{} {} [m]'
         else:
