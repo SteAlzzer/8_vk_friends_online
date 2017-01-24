@@ -17,17 +17,17 @@ def get_vk_api_via_auth(login, password):
     return api
 
 
-def get_users_names_by_ids(vk_handler, dict_of_ids):
-    list_of_users_names = vk_handler.users.get(order='hints', user_ids=dict_of_ids['online_mobile'])
-    for name in list_of_users_names:
-        name['mobile'] = 1
-    list_of_users_names.extend(vk_handler.users.get(user_ids=dict_of_ids['online']))
+def get_users_names_by_ids(vk_handler, list_of_ids):
+    list_of_users_names = vk_handler.users.get(order='hints', user_ids=list_of_ids)
     return list_of_users_names
 
 
 def get_online_friends(vk_handler):
     dict_of_ids = vk_handler.friends.getOnline(online_mobile=1)
-    list_of_users_names = get_users_names_by_ids(vk_handler, dict_of_ids)
+    list_of_users_names = get_users_names_by_ids(vk_handler, dict_of_ids['online_mobile'])
+    for name in list_of_users_names:
+        name['mobile'] = 1
+    list_of_users_names.extend(get_users_names_by_ids(vk_handler, dict_of_ids['online']))
     return list_of_users_names
 
 
